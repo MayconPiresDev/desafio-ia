@@ -14,18 +14,24 @@ const Chat = () => {
     // Atualiza o histórico local no frontend com a mensagem do usuário
     const newHistory = [...messages, { role: 'user', content: input }];
 
-    // Envia a mensagem para o backend junto com o histórico
-    const response = await sendMessageToAI(input, newHistory);
+    try {
+      // Envia a mensagem para o backend junto com o histórico
+      const response = await sendMessageToAI(input, newHistory);
 
-    // Atualiza o histórico local com a resposta da IA
-    setMessages([...newHistory, { role: 'assistant', content: response.response }]);
-    setInput('');  // Limpa o campo de entrada de texto
+      // Atualiza o histórico local com a resposta da IA
+      setMessages([...newHistory, { role: 'assistant', content: response.response }]);
+      setInput('');  // Limpa o campo de entrada de texto
+    } catch (error) {
+      console.error('Erro ao enviar mensagem:', error);
+      // Tratar erro ao enviar mensagem
+    }
   };
 
   // Função para capturar a tecla Enter e enviar a mensagem
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      handleSendMessage();
+      event.preventDefault();  // Previne o comportamento padrão do Enter (como enviar um formulário)
+      handleSendMessage();  // Chama a função para enviar a mensagem
     }
   };
 
@@ -44,11 +50,11 @@ const Chat = () => {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleKeyDown}  // Captura o evento de tecla "Enter"
           placeholder="Digite sua mensagem..."
           className="chat-input"
         />
-        <button onClick={handleSendMessage} className="send-button">Enviar</button>
+        <button onClick={handleSendMessage} className="send-button">Enviar</button> {/* Envia ao clicar no botão */}
       </div>
     </div>
   );

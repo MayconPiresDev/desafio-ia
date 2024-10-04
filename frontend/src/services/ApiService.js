@@ -14,6 +14,10 @@ export const sendMessageToAI = async (message, conversationHistory) => {
       }),
     });
 
+    if (!response.ok) {
+      throw new Error(`Erro: ${response.statusText}`);
+    }
+
     const data = await response.json();
     return data;  // Retorna a resposta do backend
   } catch (error) {

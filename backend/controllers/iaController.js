@@ -69,8 +69,8 @@ const sendToDialogFlow = async (message, conversationHistory) => {
   // Cria uma nova instância do cliente DialogFlow
   const sessionClient = new dialogflow.SessionsClient({
     credentials: {
-      client_email: process.env.GOOGLE_CLIENT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),  // Corrige o \n para evitar erros de quebra de linha no JSON
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,  // Pegando o client_email do .env
+      private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),  // Pegando a chave privada do .env e ajustando quebras de linha
     }
   });
 
