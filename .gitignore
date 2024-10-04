@@ -1,0 +1,42 @@
+# Node.js dependencies
+node_modules/
+
+# Build output
+frontend/public/bundle.js
+frontend/public/assets/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Webpack related files
+webpack-stats.json
+
+# Temporary files
+*.tmp
+*.swp
+
+# IDE specific settings
+.vscode/
+.idea/
+
+# Dependency lock files
+yarn.lock
+package-lock.json
+
+# Generated service worker
+service-worker.js
+
+# Coverage directory for testing
+coverage/
+config-json/*.json
