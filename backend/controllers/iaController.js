@@ -1,9 +1,10 @@
 const axios = require('axios');  // Importa a biblioteca axios para fazer requisições HTTP
 const dialogflow = require('@google-cloud/dialogflow');  // Importa a biblioteca DialogFlow para fallback
 const { v4: uuidv4 } = require('uuid');  // Importa biblioteca para gerar IDs únicos de sessão
+require('dotenv').config();  // Carrega as variáveis de ambiente do .env
 
 // Variável para rastrear se a OpenAI excedeu a cota
-let isUsingDialogFlow = false;  
+let isUsingDialogFlow = false;
 
 // Função responsável por enviar a mensagem do usuário para a IA e manter o histórico da conversa
 const sendMessage = async (req, res) => {
@@ -16,7 +17,7 @@ const sendMessage = async (req, res) => {
   try {
     if (isUsingDialogFlow) {
       // Se estiver usando o DialogFlow, faz a requisição diretamente para o DialogFlow
-      const dialogflowResponse = await sendToDialogFlow(message, updatedHistory); 
+      const dialogflowResponse = await sendToDialogFlow(message, updatedHistory);
       res.json({ response: dialogflowResponse, conversationHistory: updatedHistory });
     } else {
       // Faz a requisição POST para a API da OpenAI
@@ -66,8 +67,13 @@ const sendMessage = async (req, res) => {
 // Função para enviar a mensagem ao DialogFlow caso a OpenAI falhe ou esteja sendo usada exclusivamente
 const sendToDialogFlow = async (message, conversationHistory) => {
   // Cria uma nova instância do cliente DialogFlow
-  const sessionClient = new dialogflow.SessionsClient();
-  
+  const sessionClient = new dialogflow.SessionsClient({
+    credentials: {
+      client_email: process.env.GOOGLE_CLIENT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),  // Corrige o \n para evitar erros de quebra de linha no JSON
+    }
+  });
+
   // Gera dinamicamente o ID da sessão para manter o contexto de cada usuário
   const sessionId = uuidv4();
 
